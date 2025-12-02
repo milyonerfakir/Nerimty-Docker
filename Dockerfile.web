@@ -1,14 +1,10 @@
-FROM node:18-alpine
+FROM node:20-alpine
 
 WORKDIR /app
-
-RUN apk add --no-cache git
-
-RUN git clone https://github.com/Nerimity/nerimity-web.git .
-
-RUN npm ci
-RUN npm run build
+RUN apk add --no-cache git && \
+    git clone https://github.com/Nerimity/nerimity-web.git . && \
+    npm install && \
+    npm run build
 
 EXPOSE 3000
-
 CMD ["npm", "run", "preview"]

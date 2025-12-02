@@ -1,18 +1,19 @@
-FROM node:18-alpine
+FROM node:20-alpine
 
 WORKDIR /app
 
+# Gerekli paketler
 RUN apk add --no-cache git
 
-# Kaynak kodu çek
+# Kodu indir
 RUN git clone https://github.com/Nerimity/nerimity-server.git .
 
-# Temiz kurulum (npm install yerine)
-RUN npm ci
+# Node modülleri kur (peer dep hatalarına izin veriyoruz)
+RUN npm install --legacy-peer-deps
 
-# ts-node eksik -> projeye gerekli
+# Typescript derleyicisi ve ts-node gerekiyor
 RUN npm install -g ts-node typescript
 
 EXPOSE 3001
 
-CMD ["npm", "run", "start:prod"]
+CMD ["npm", "run", "dev"]

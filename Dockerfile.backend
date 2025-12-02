@@ -1,18 +1,22 @@
 FROM node:20-alpine
 
-# pnpm kur
-RUN npm install -g pnpm
-
 WORKDIR /app
 
-# Repository çek
-RUN apk add --no-cache git && \
-    git clone https://github.com/Nerimity/nerimity-server.git . 
+RUN apk add --no-cache git openssl
 
-# Bağımlılıkları pnpm ile kur
+# PNPM kur
+RUN npm install -g pnpm
+
+# Repo klonla
+RUN git clone https://github.com/Nerimity/nerimity-server.git .
+
+# Bağımlılıkları yükle
 RUN pnpm install
 
-# Build (TS kullanıyor)
+# Prisma Client'ı oluştur
+RUN pnpm prisma generate
+
+# Build aşaması
 RUN pnpm build
 
 EXPOSE 3001
